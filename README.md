@@ -1,0 +1,3 @@
+# VCS - Merge Request / Pull Request Batch Actions
+
+> A cli for basic batch actions across multiple merge requests or pull requests, such as closing, merging, ...

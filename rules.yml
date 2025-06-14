@@ -1,0 +1,5 @@
+rules:
+  - expression: contains(labels, "dependencies")
+    action: "approve"
+  - expression: contains(title, "add gitlab ci workflow")
+    action: "approve"
