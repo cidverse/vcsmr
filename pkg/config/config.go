@@ -11,8 +11,8 @@ type Config struct {
 }
 
 type Rule struct {
-	Expression string `yaml:"expression"`
-	Action     string `yaml:"action"` // e.g., close, approve, merge
+	Expression string   `yaml:"expression"`
+	Actions    []string `yaml:"actions"` // e.g., close, approve, merge
 }
 
 func LoadConfig(path string) (*Config, error) {

@@ -65,7 +65,7 @@ func reviewCmd() *cobra.Command {
 					log.Debug().Str("expression", rule.Expression).Bool("result", result).Msg("evaluating rule")
 
 					if result {
-						matchedActions = append(matchedActions, rule.Action)
+						matchedActions = append(matchedActions, rule.Actions...)
 					}
 				}
 
