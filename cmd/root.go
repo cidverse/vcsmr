@@ -13,7 +13,7 @@ var configFile string
 
 func rootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  `vcspr`,
+		Use:  `vcsmr`,
 		Long: ``,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			zerologconfig.Configure(cfg)

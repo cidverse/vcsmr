@@ -1,4 +1,4 @@
-module github.com/cidverse/vcspr
+module github.com/cidverse/vcsmr
 
 go 1.24.4
 
@@ -7,7 +7,7 @@ require (
 	github.com/cidverse/cidverseutils/zerologconfig v0.1.1
 	github.com/cidverse/go-ptr v0.0.0-20240331160646-489e694bebbf
 	github.com/cidverse/go-rules v0.0.0-20250614224628-52704bb6b812
-	github.com/cidverse/go-vcsapp v0.0.0-20250614232007-2524ca20d962
+	github.com/cidverse/go-vcsapp v0.0.0-20250614232519-12a1262087d3
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.9.1
 	gopkg.in/yaml.v3 v3.0.1

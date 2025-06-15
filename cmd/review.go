@@ -8,8 +8,8 @@ import (
 	"github.com/cidverse/go-rules/pkg/expr"
 	"github.com/cidverse/go-vcsapp/pkg/platform/api"
 	"github.com/cidverse/go-vcsapp/pkg/vcsapp"
-	"github.com/cidverse/vcspr/pkg/config"
-	"github.com/cidverse/vcspr/pkg/mrutil"
+	"github.com/cidverse/vcsmr/pkg/config"
+	"github.com/cidverse/vcsmr/pkg/mrutil"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -45,14 +45,16 @@ func reviewCmd() *cobra.Command {
 			// data
 			for _, mr := range mrs {
 				// diff
-				diff, err := platform.MergeRequestDiff(mr.Repository, mr)
-				if err != nil {
-					log.Error().Err(err).Msg("failed to get merge request diff")
-					continue
-				}
+				/*
+					diff, err := platform.MergeRequestDiff(mr.Repository, mr)
+					if err != nil {
+						log.Error().Err(err).Msg("failed to get merge request diff")
+						continue
+					}
+				*/
 
 				// evaluate rules
-				mrContext := mrutil.GenerateMRContext(mr, diff)
+				mrContext := mrutil.GenerateMRContext(mr, api.MergeRequestDiff{})
 				var matchedActions []string
 				for _, rule := range conf.Rules {
 					result, err := expr.EvalBooleanExpression(rule.Expression, mrContext)
@@ -71,13 +73,13 @@ func reviewCmd() *cobra.Command {
 					for _, action := range matchedActions {
 						switch action {
 						case "rebase":
-							fmt.Printf("glab mr rebase %d --skip-ci --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("glab mr rebase %d --repo %s\n", mr.Number, mr.Repository.Path) // --skip-ci
 						case "approve":
-							fmt.Printf("glab mr approve %d --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("glab mr approve %d --repo %s\n", mr.Number, mr.Repository.Path)
 						case "merge":
-							fmt.Printf("glab mr merge %d --rebase --squash --auto-merge --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("glab mr merge %d --repo %s --auto-merge --yes\n", mr.Number, mr.Repository.Path)
 						case "close":
-							fmt.Printf("glab mr close %d --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("glab mr close %d --repo %s\n", mr.Number, mr.Repository.Path)
 						default:
 							log.Warn().Str("action", action).Msg("unknown action in config")
 						}
@@ -86,13 +88,13 @@ func reviewCmd() *cobra.Command {
 					for _, action := range matchedActions {
 						switch action {
 						case "rebase":
-							fmt.Printf("gh pr rebase %d --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("gh pr rebase %d --repo %s\n", mr.Number, mr.Repository.Path)
 						case "approve":
-							fmt.Printf("gh pr review %d --approve --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("gh pr review %d --approve --repo %s\n", mr.Number, mr.Repository.Path)
 						case "merge":
-							fmt.Printf("gh pr merge %d --squash --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("gh pr merge %d --squash --repo %s\n", mr.Number, mr.Repository.Path)
 						case "close":
-							fmt.Printf("gh pr close %d --repo %s\n", mr.Number, mr.Repository.Namespace+"/"+mr.Repository.Name)
+							fmt.Printf("gh pr close %d --repo %s\n", mr.Number, mr.Repository.Path)
 						default:
 							log.Warn().Str("action", action).Msg("unknown action in config")
 						}

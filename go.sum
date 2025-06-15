@@ -23,8 +23,8 @@ github.com/cidverse/go-ptr v0.0.0-20240331160646-489e694bebbf h1:/DLETx+e0J8mWZy
 github.com/cidverse/go-ptr v0.0.0-20240331160646-489e694bebbf/go.mod h1:nvQPqid2KB17xXiiFp/Fhd+dO5lusCSuBQtOXfsd+mk=
 github.com/cidverse/go-rules v0.0.0-20250614224628-52704bb6b812 h1:3N+3h/KNdG7wzHup4DdOM+UzEGD8tFp252EWnFH6WwQ=
 github.com/cidverse/go-rules v0.0.0-20250614224628-52704bb6b812/go.mod h1:idKxSNVgvigegPgr+XgOeH+l42h20r/0k4kIQXASfq0=
-github.com/cidverse/go-vcsapp v0.0.0-20250614232007-2524ca20d962 h1:YyUrx1kl5jLOCVaPDXQ+YtHFyI/lVpCEmr0BEzgBQRg=
-github.com/cidverse/go-vcsapp v0.0.0-20250614232007-2524ca20d962/go.mod h1:miDKCbtaD7iJ++5gOy+UavfLKRvX8o2TF5NUCNwHO5E=
+github.com/cidverse/go-vcsapp v0.0.0-20250614232519-12a1262087d3 h1:ggdtweuZ7C4H3thcg9Jk3aK2PeKlSnXXwv9Cwm9DDfQ=
+github.com/cidverse/go-vcsapp v0.0.0-20250614232519-12a1262087d3/go.mod h1:miDKCbtaD7iJ++5gOy+UavfLKRvX8o2TF5NUCNwHO5E=
 github.com/cloudflare/circl v1.6.1 h1:zqIqSPIndyBh1bjLVVDHMPpVKqp8Su/V+6MeDzzQBQ0=
 github.com/cloudflare/circl v1.6.1/go.mod h1:uddAzsPgqdMAYatqJ0lsjX1oECcQLIlRpzZh3pJrofs=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

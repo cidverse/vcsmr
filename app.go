@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/cidverse/vcspr/cmd"
+	"github.com/cidverse/vcsmr/cmd"
 	"github.com/rs/zerolog/log"
 )
 

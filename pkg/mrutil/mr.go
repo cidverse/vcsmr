@@ -17,16 +17,30 @@ type DependencyUpdate struct {
 // GenerateMRContext builds the merge request context map for user-provided rule evaluation
 func GenerateMRContext(mr api.MergeRequest, diff api.MergeRequestDiff) map[string]interface{} {
 	mrContext := map[string]interface{}{
-		"title":  mr.Title,
-		"body":   mr.Description,
-		"labels": mr.Labels,
+		"title":               mr.Title,
+		"description":         mr.Description,
+		"labels":              mr.Labels,
+		"sourceBranch":        mr.SourceBranch,
+		"targetBranch":        mr.TargetBranch,
+		"state":               string(mr.State),
+		"isMerged":            mr.IsMerged,
+		"isLocked":            mr.IsLocked,
+		"isDraft":             mr.IsDraft,
+		"authorId":            mr.Author.ID,
+		"authorName":          mr.Author.Username,
+		"repositoryNamespace": mr.Repository.Namespace,
+		"repositoryName":      mr.Repository.Name,
+		"repositoryPath":      mr.Repository.Path,
+		"repositoryUrl":       mr.Repository.URL,
 	}
 
 	if strings.Contains(mr.Description, "| Package |") {
 		updates := extractDependencyUpdates(mr.Description)
-		if len(updates) > 0 {
-			mrContext["dependencies"] = updates
-		}
+		/*
+			if len(updates) > 0 {
+				mrContext["dependencies"] = updates
+			}
+		*/
 		if len(updates) == 1 {
 			mrContext["dependencyType"] = updates[0].PackageType
 			mrContext["dependencyCoordinate"] = updates[0].Coordinate
