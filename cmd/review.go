@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/cidverse/go-ptr"
 	"github.com/cidverse/go-rules/pkg/expr"
@@ -68,8 +69,13 @@ func reviewCmd() *cobra.Command {
 						matchedActions = append(matchedActions, rule.Actions...)
 					}
 				}
+				matchedActions = slices.Compact(matchedActions)
 
 				if method == "cli" && mr.Repository.PlatformType == "gitlab" {
+					if len(matchedActions) > 0 {
+						fmt.Printf("# MR repository %s - #%d - %s\n", mr.Repository.Path, mr.Number, mr.Title)
+					}
+
 					for _, action := range matchedActions {
 						switch action {
 						case "rebase":
@@ -83,8 +89,16 @@ func reviewCmd() *cobra.Command {
 						default:
 							log.Warn().Str("action", action).Msg("unknown action in config")
 						}
+
+						if conf.Sleep > 0 {
+							fmt.Printf("sleep %d\n", conf.Sleep)
+						}
 					}
 				} else if method == "cli" && mr.Repository.PlatformType == "github" {
+					if len(matchedActions) > 0 {
+						fmt.Printf("# MR repository %s - #%d - %s\n", mr.Repository.Path, mr.Number, mr.Title)
+					}
+
 					for _, action := range matchedActions {
 						switch action {
 						case "rebase":
@@ -97,6 +111,10 @@ func reviewCmd() *cobra.Command {
 							fmt.Printf("gh pr close %d --repo %s\n", mr.Number, mr.Repository.Path)
 						default:
 							log.Warn().Str("action", action).Msg("unknown action in config")
+						}
+
+						if conf.Sleep > 0 {
+							fmt.Printf("sleep %d\n", conf.Sleep)
 						}
 					}
 				} else if method == "api" {

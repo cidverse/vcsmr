@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	Rules []Rule `yaml:"rules"`
+	Sleep int    `yaml:"sleep,omitempty"` // optional sleep time in seconds between actions
 }
 
 type Rule struct {
