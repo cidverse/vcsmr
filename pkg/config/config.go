@@ -12,6 +12,7 @@ type Config struct {
 }
 
 type Rule struct {
+	Id         string   `yaml:"id,omitempty"`
 	Expression string   `yaml:"expression"`
 	Actions    []string `yaml:"actions"` // e.g., close, approve, merge
 }

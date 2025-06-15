@@ -46,6 +46,11 @@ func GenerateMRContext(mr api.MergeRequest, diff api.MergeRequestDiff) map[strin
 			mrContext["dependencyCoordinate"] = updates[0].Coordinate
 			mrContext["dependencyFrom"] = updates[0].From
 			mrContext["dependencyTo"] = updates[0].To
+		} else {
+			mrContext["dependencyType"] = ""
+			mrContext["dependencyCoordinate"] = ""
+			mrContext["dependencyFrom"] = ""
+			mrContext["dependencyTo"] = ""
 		}
 	}
 

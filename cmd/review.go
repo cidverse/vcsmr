@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"slices"
 
@@ -18,6 +19,7 @@ import (
 func reviewCmd() *cobra.Command {
 	var configPath string
 	var method string
+	var ruleIds []string
 
 	cmd := &cobra.Command{
 		Use:     "review",
@@ -58,12 +60,17 @@ func reviewCmd() *cobra.Command {
 				mrContext := mrutil.GenerateMRContext(mr, api.MergeRequestDiff{})
 				var matchedActions []string
 				for _, rule := range conf.Rules {
-					result, err := expr.EvalBooleanExpression(rule.Expression, mrContext)
-					if err != nil {
-						log.Error().Err(err).Str("expression", rule.Expression).Msg("ignoring rule due to error")
+					if len(ruleIds) > 0 && !slices.Contains(ruleIds, rule.Id) {
+						slog.Debug("ignoring rule", "id", rule.Id, "expression", rule.Expression)
 						continue
 					}
-					log.Debug().Str("expression", rule.Expression).Bool("result", result).Msg("evaluating rule")
+
+					result, err := expr.EvalBooleanExpression(rule.Expression, mrContext)
+					if err != nil {
+						slog.With("err", err).Error("failed to evaluate rule expression", "id", rule.Id, "expression", rule.Expression)
+						continue
+					}
+					slog.Debug("evaluating rule", "id", rule.Id, "expression", rule.Expression, "result", result)
 
 					if result {
 						matchedActions = append(matchedActions, rule.Actions...)
@@ -142,6 +149,7 @@ func reviewCmd() *cobra.Command {
 
 	cmd.Flags().StringVarP(&configPath, "config", "c", "review.yml", "path to review config")
 	cmd.Flags().StringVarP(&method, "method", "m", "cli", "method to use to apply the actions (cli, api)")
+	cmd.Flags().StringSliceVarP(&ruleIds, "rule", "r", []string{}, "only apply rules with the given IDs, can be used multiple times")
 
 	return cmd
 }
