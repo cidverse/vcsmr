@@ -9,6 +9,7 @@ import (
 	"github.com/cidverse/go-vcsapp/pkg/platform/api"
 	"github.com/cidverse/go-vcsapp/pkg/vcsapp"
 	"github.com/cidverse/vcspr/pkg/config"
+	"github.com/cidverse/vcspr/pkg/mrutil"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -44,20 +45,14 @@ func reviewCmd() *cobra.Command {
 			// data
 			for _, mr := range mrs {
 				// diff
-				/*
-					diff, err := platform.MergeRequestDiff(mr.Repository, mr)
-					if err != nil {
-						log.Error().Err(err).Msg("failed to get merge request diff")
-						continue
-					}
-				*/
+				diff, err := platform.MergeRequestDiff(mr.Repository, mr)
+				if err != nil {
+					log.Error().Err(err).Msg("failed to get merge request diff")
+					continue
+				}
 
 				// evaluate rules
-				mrContext := map[string]interface{}{
-					"title":  mr.Title,
-					"body":   mr.Description,
-					"labels": mr.Labels,
-				}
+				mrContext := mrutil.GenerateMRContext(mr, diff)
 				var matchedActions []string
 				for _, rule := range conf.Rules {
 					result, err := expr.EvalBooleanExpression(rule.Expression, mrContext)
