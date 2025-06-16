@@ -67,7 +67,7 @@ func reviewCmd() *cobra.Command {
 
 					result, err := expr.EvalBooleanExpression(rule.Expression, mrContext)
 					if err != nil {
-						slog.With("err", err).Error("failed to evaluate rule expression", "id", rule.Id, "expression", rule.Expression)
+						slog.With("err", err).Warn("failed to evaluate rule expression", "id", rule.Id, "expression", rule.Expression)
 						continue
 					}
 					slog.Debug("evaluating rule", "id", rule.Id, "expression", rule.Expression, "result", result)

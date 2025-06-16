@@ -17,21 +17,25 @@ type DependencyUpdate struct {
 // GenerateMRContext builds the merge request context map for user-provided rule evaluation
 func GenerateMRContext(mr api.MergeRequest, diff api.MergeRequestDiff) map[string]interface{} {
 	mrContext := map[string]interface{}{
-		"title":               mr.Title,
-		"description":         mr.Description,
-		"labels":              mr.Labels,
-		"sourceBranch":        mr.SourceBranch,
-		"targetBranch":        mr.TargetBranch,
-		"state":               string(mr.State),
-		"isMerged":            mr.IsMerged,
-		"isLocked":            mr.IsLocked,
-		"isDraft":             mr.IsDraft,
-		"authorId":            mr.Author.ID,
-		"authorName":          mr.Author.Username,
-		"repositoryNamespace": mr.Repository.Namespace,
-		"repositoryName":      mr.Repository.Name,
-		"repositoryPath":      mr.Repository.Path,
-		"repositoryUrl":       mr.Repository.URL,
+		"title":                mr.Title,
+		"description":          mr.Description,
+		"labels":               mr.Labels,
+		"sourceBranch":         mr.SourceBranch,
+		"targetBranch":         mr.TargetBranch,
+		"state":                string(mr.State),
+		"isMerged":             mr.IsMerged,
+		"isLocked":             mr.IsLocked,
+		"isDraft":              mr.IsDraft,
+		"authorId":             mr.Author.ID,
+		"authorName":           mr.Author.Username,
+		"repositoryNamespace":  mr.Repository.Namespace,
+		"repositoryName":       mr.Repository.Name,
+		"repositoryPath":       mr.Repository.Path,
+		"repositoryUrl":        mr.Repository.URL,
+		"dependencyType":       "",
+		"dependencyCoordinate": "",
+		"dependencyFrom":       "",
+		"dependencyTo":         "",
 	}
 
 	if strings.Contains(mr.Description, "| Package |") {
@@ -46,11 +50,6 @@ func GenerateMRContext(mr api.MergeRequest, diff api.MergeRequestDiff) map[strin
 			mrContext["dependencyCoordinate"] = updates[0].Coordinate
 			mrContext["dependencyFrom"] = updates[0].From
 			mrContext["dependencyTo"] = updates[0].To
-		} else {
-			mrContext["dependencyType"] = ""
-			mrContext["dependencyCoordinate"] = ""
-			mrContext["dependencyFrom"] = ""
-			mrContext["dependencyTo"] = ""
 		}
 	}
 
