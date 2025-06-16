@@ -57,12 +57,12 @@ func GenerateMRContext(mr api.MergeRequest, diff api.MergeRequestDiff) map[strin
 	return mrContext
 }
 
+var compatBadgeRegex = regexp.MustCompile(`https://developer\.mend\.io/api/mc/badges/compatibility/([^/]+)/([^/]+)/([^/]+)/([^/?]+)`)
+
 func extractDependencyUpdates(description string) []DependencyUpdate {
 	var updates []DependencyUpdate
 
-	re := regexp.MustCompile(`https://developer\.mend\.io/api/mc/badges/compatibility/([^/]+)/([^/]+)/([^/]+)/([^/?]+)`)
-
-	matches := re.FindAllStringSubmatch(description, -1)
+	matches := compatBadgeRegex.FindAllStringSubmatch(description, -1)
 	for _, match := range matches {
 		if len(match) >= 5 {
 			updates = append(updates, DependencyUpdate{

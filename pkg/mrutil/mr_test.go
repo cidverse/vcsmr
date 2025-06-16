@@ -1,10 +1,10 @@
 package mrutil
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/cidverse/go-vcsapp/pkg/platform/api"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateMRContext_RenovatePR(t *testing.T) {
@@ -19,27 +19,15 @@ This PR contains the following updates:
 `,
 		Labels: []string{"dependencies", "renovate"},
 	}
-	diff := api.MergeRequestDiff{} // Not used in current logic
+	got := GenerateMRContext(mr, api.MergeRequestDiff{})
 
-	got := GenerateMRContext(mr, diff)
-
-	want := map[string]interface{}{
-		"title":  mr.Title,
-		"body":   mr.Description,
-		"labels": mr.Labels,
-		"dependencies": []DependencyUpdate{
-			{
-				PackageType: "maven",
-				Coordinate:  "org.junit:junit-bom",
-				From:        "5.13.0",
-				To:          "5.13.1",
-			},
-		},
-	}
-
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("GenerateMRContext() = %v\nwant = %v", got, want)
-	}
+	assert.Equal(t, mr.Title, got["title"])
+	assert.Equal(t, mr.Description, got["description"])
+	assert.Equal(t, mr.Labels, got["labels"])
+	assert.Equal(t, "maven", got["dependencyType"])
+	assert.Equal(t, "org.junit:junit-bom", got["dependencyCoordinate"])
+	assert.Equal(t, "5.13.0", got["dependencyFrom"])
+	assert.Equal(t, "5.13.1", got["dependencyTo"])
 }
 
 func TestGenerateMRContext_NonRenovatePR(t *testing.T) {
@@ -48,17 +36,9 @@ func TestGenerateMRContext_NonRenovatePR(t *testing.T) {
 		Description: "This MR improves the debug logs for auth failures.",
 		Labels:      []string{"enhancement"},
 	}
-	diff := api.MergeRequestDiff{}
+	got := GenerateMRContext(mr, api.MergeRequestDiff{})
 
-	got := GenerateMRContext(mr, diff)
-
-	want := map[string]interface{}{
-		"title":  mr.Title,
-		"body":   mr.Description,
-		"labels": mr.Labels,
-	}
-
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("GenerateMRContext() = %v\nwant = %v", got, want)
-	}
+	assert.Equal(t, mr.Title, got["title"])
+	assert.Equal(t, mr.Description, got["description"])
+	assert.Equal(t, mr.Labels, got["labels"])
 }

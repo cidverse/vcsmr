@@ -34,16 +34,18 @@ func listCmd() *cobra.Command {
 
 			// data
 			data := clioutputwriter.TabularData{
-				Headers: []string{"ID", "REPO_URL", "TITLE", "AUTHOR_ID", "AUTHOR_NAME"},
+				Headers: []string{"ID", "REPO", "TITLE", "AUTHOR_ID", "AUTHOR_NAME", "SOURCE_BRANCH", "TARGET_BRANCH"},
 				Rows:    [][]interface{}{},
 			}
 			for _, mr := range mrs {
 				data.Rows = append(data.Rows, []interface{}{
 					mr.Id,
-					mr.Repository.URL,
+					mr.Repository.Path,
 					mr.Title,
 					mr.Author.ID,
 					mr.Author.Name,
+					mr.SourceBranch,
+					mr.TargetBranch,
 				})
 			}
 
